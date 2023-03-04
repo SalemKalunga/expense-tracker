@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client';
 import "./index.scss";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { DepositePopupContextProvider } from "./contexts/deposite.popup.context";
+import { PopupContextProvider } from "./contexts/popup.context";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <DepositePopupContextProvider>
+    <PopupContextProvider>
       <App />
-    </DepositePopupContextProvider>
+    </PopupContextProvider>
   </React.StrictMode>
 );
 

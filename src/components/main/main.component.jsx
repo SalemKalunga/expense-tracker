@@ -11,8 +11,8 @@ import {
   WithdrawTd,
   WithdrawButton,
 } from "./main.style";
-import AddIncomePopup from "../add_income_popup.component/add_income_popup.component";
-import { DepositePopupContext } from "../../contexts/deposite.popup.context";
+import AddIncomePopup from "../popup.component/popup.component";
+import { PopupContext } from "../../contexts/popup.context";
 const Main = () => {
   const INITIAL_VALUES = {
     total: 0,
@@ -26,8 +26,8 @@ const Main = () => {
   };
 
   const expenseReducer = (state, action) => {
-    const { total, expenses } = state;
-    const { type, payload } = action;
+    const { expenses } = state;
+    const { type } = action;
     switch (type) {
       case ACTIONS.TOTAL:
         return { ...state, total: getTotal(expenses) };
@@ -40,7 +40,9 @@ const Main = () => {
     const withdras = [];
     const deposites = [];
     expenses.map((expense) => {
-      expense.actionId ? deposites.push(expense) : withdras.push(expense);
+      return expense.actionId
+        ? deposites.push(expense)
+        : withdras.push(expense);
     });
     let totalA = deposites.reduce((counter, deposite) => {
       return (counter = counter + deposite.amount);
@@ -65,11 +67,18 @@ const Main = () => {
   }, expenses);
 
   const [{ total }, dispatch] = useReducer(expenseReducer, INITIAL_VALUES);
-  const { openedDepositeOpup, setOpenedDepositeOpup } =
-    useContext(DepositePopupContext);
+  const {
+    openedDepositeOpup,
+    setOpenedDepositeOpup,
+    openedWithdrawOpup,
+    setOpenedWithdrawOpup,
+  } = useContext(PopupContext);
 
   const toggleDepositePopup = () => {
     setOpenedDepositeOpup(!openedDepositeOpup);
+  };
+  const toggleWithdrawPopup = () => {
+    setOpenedWithdrawOpup(!openedWithdrawOpup);
   };
   return (
     <MainPart>
@@ -113,11 +122,11 @@ const Main = () => {
       </Table>
       <ButtonsContainer>
         <AddIncomeButton onClick={toggleDepositePopup}>
-          add income
+          effectuer un dépot
         </AddIncomeButton>
-        <WithdrawButton>withdraw</WithdrawButton>
+        <WithdrawButton onClick={toggleWithdrawPopup}>retirer</WithdrawButton>
       </ButtonsContainer>
-      {openedDepositeOpup ? <AddIncomePopup /> : <i></i>}
+      {openedDepositeOpup || openedWithdrawOpup ? <AddIncomePopup /> : <i></i>}
     </MainPart>
   );
 };

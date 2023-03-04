@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { breakpoints, flexBox } from "../main/main.style";
+import { flexBox } from "../main/main.style";
 import { colors } from "../main/main.style";
-import { PROPERTIES } from "../main/main.style";
 
 export const PopupContainer = styled.div`
   position: fixed;
