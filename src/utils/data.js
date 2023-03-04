@@ -1,0 +1,51 @@
+export const expenses = [
+  {
+    id: 1,
+    actionId: 0,
+    reason: "Internet",
+    amount: 20,
+    date: "04/03/2023",
+  },
+  {
+    id: 2,
+    actionId: 2,
+    reason: "Salary",
+    amount: 250,
+    date: "04/03/2023",
+  },
+  {
+    id: 5,
+    actionId: 2,
+    reason: "Salary",
+    amount: 150,
+    date: "04/03/2023",
+  },
+  {
+    id: 3,
+    actionId: 0,
+    amount: 25,
+    reason: "Transport",
+    date: "04/03/2023",
+  },
+  {
+    id: 6,
+    actionId: 0,
+    amount: 20,
+    reason: "Transport",
+    date: "04/03/2023",
+  },
+  {
+    id: 4,
+    actionId: 0,
+    amount: 35,
+    reason: "Chossures",
+    date: "04/03/2023",
+  },
+  {
+    id: 7,
+    actionId: 0,
+    amount: 229,
+    reason: "Chossures",
+    date: "04/03/2023",
+  },
+];
