@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import "./main.style";
 import { expenses } from "../../utils/data";
 import {
@@ -11,7 +11,8 @@ import {
   WithdrawTd,
   WithdrawButton,
 } from "./main.style";
-
+import AddIncomePopup from "../add_income_popup.component/add_income_popup.component";
+import { DepositePopupContext } from "../../contexts/deposite.popup.context";
 const Main = () => {
   const INITIAL_VALUES = {
     total: 0,
@@ -64,6 +65,12 @@ const Main = () => {
   }, expenses);
 
   const [{ total }, dispatch] = useReducer(expenseReducer, INITIAL_VALUES);
+  const { openedDepositeOpup, setOpenedDepositeOpup } =
+    useContext(DepositePopupContext);
+
+  const toggleDepositePopup = () => {
+    setOpenedDepositeOpup(!openedDepositeOpup);
+  };
   return (
     <MainPart>
       <TotalDiv>
@@ -105,9 +112,12 @@ const Main = () => {
         </tbody>
       </Table>
       <ButtonsContainer>
-        <AddIncomeButton>add income</AddIncomeButton>
+        <AddIncomeButton onClick={toggleDepositePopup}>
+          add income
+        </AddIncomeButton>
         <WithdrawButton>withdraw</WithdrawButton>
       </ButtonsContainer>
+      {openedDepositeOpup ? <AddIncomePopup /> : <i></i>}
     </MainPart>
   );
 };

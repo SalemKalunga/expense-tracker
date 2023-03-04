@@ -9,7 +9,7 @@ export const breakpoints = {
   mobile: ` (max-width:${sizes.small})`,
   tablette: ` (max-width:${sizes.medium})`,
 };
-const colors = {
+export const colors = {
   white: "#fff",
   black: "black",
   gray: "#999",
@@ -20,6 +20,9 @@ const colors = {
   crimson: "crimson",
   crimson_dark: "rgb(189, 15, 50)",
   lightgray: "lightgray",
+  transparant_black_a: "rgba(0, 0, 0, 0.8)",
+  transparant_black_b: "rgba(0, 0, 0, 0.5)",
+  transparant_black_c: "rgba(0, 0, 0, 0.3)",
 };
 export const responsivePadding = `
     padding:1rem 20rem;
@@ -30,12 +33,22 @@ export const responsivePadding = `
         padding:1rem 2rem;
     }
 `;
-const PROPERTIES = {
+export const PROPERTIES = {
   boxShadows: {
     a: "box-shadow: 0px 0px 3px lightgray;",
     b: "box-shadow: 0px 3px 3px lightgray;",
     c: "box-shadow: 3px 3px 3px lightgray;",
   },
+};
+export const flexBox = (direction, justify, align, gap) => {
+  const flex = `
+        display:flex;
+        flex-direction:${direction};
+        justify-content:${justify};
+        align-items:${align};
+        gap:${gap}rem;
+    `;
+  return flex;
 };
 export const TotalDiv = styled.div`
   padding: 1.5rem;
@@ -66,7 +79,7 @@ export const DepositeTd = styled.td`
   color: ${colors.success};
 `;
 export const WithdrawTd = styled.td`
-  color: ${colors.red};
+  color: ${colors.gray};
 `;
 export const MainPart = styled.main`
   ${responsivePadding}
@@ -81,9 +94,10 @@ export const ButtonsContainer = styled.div`
   gap: 1rem;
 `;
 
-const button = `
+export const button = `
     padding: 1rem 2rem;
     font-size: 1rem;
+    min-width:40%;
     @media screen and ${breakpoints.tablette} {
     width: 50%;
     }
