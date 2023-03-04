@@ -2,11 +2,14 @@ import { useEffect, useReducer } from "react";
 import "./main.style";
 import { expenses } from "../../utils/data";
 import {
+  ButtonsContainer,
   DepositeTd,
+  AddIncomeButton,
   MainPart,
   Table,
   TotalDiv,
   WithdrawTd,
+  WithdrawButton,
 } from "./main.style";
 
 const Main = () => {
@@ -101,6 +104,10 @@ const Main = () => {
           })}
         </tbody>
       </Table>
+      <ButtonsContainer>
+        <AddIncomeButton>add income</AddIncomeButton>
+        <WithdrawButton>withdraw</WithdrawButton>
+      </ButtonsContainer>
     </MainPart>
   );
 };
