@@ -20,9 +20,8 @@ const AddIncomeForm = ({ depositeHandler }) => {
     setdepositeFormData({ ...depositeFormData, [name]: value });
   };
 
-  const HandleDeposite = async (event) => {
+  const HandleDeposite = (event) => {
     event.preventDefault();
-
     const date = new Date();
     const ids = {
       day: date.getDate(),
@@ -38,7 +37,7 @@ const AddIncomeForm = ({ depositeHandler }) => {
       actionId: 1,
       reason: source,
       amount: parseFloat(amount),
-      date: `${ids.day}-${ids.month}-${ids.year}`,
+      date: `${ids.day}/${ids.month}/${ids.year} - ${ids.hour}h : ${ids.minutes}min`,
     };
     depositeHandler(expense);
     setOpenedDepositeOpup(!openedDepositeOpup);
@@ -58,6 +57,7 @@ const AddIncomeForm = ({ depositeHandler }) => {
           placeholder="$ amount"
           value={amount}
           onChange={(e) => formInputHandler(e)}
+          min={1}
           required
         />
         <input

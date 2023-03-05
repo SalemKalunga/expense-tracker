@@ -5,7 +5,7 @@ import AddIncomeForm from "../add_income_form.component/add_income_form.componen
 import WithdrawForm from "../withdraw_form.component/withdraw_form.component";
 import { PopupContext } from "../../contexts/popup.context";
 
-const AddIncomePopup = ({ depositeHandler }) => {
+const AddIncomePopup = ({ depositeHandler, withdrawHandler }) => {
   const { openedDepositeOpup, openedWithdrawOpup } = useContext(PopupContext);
 
   return (
@@ -13,9 +13,13 @@ const AddIncomePopup = ({ depositeHandler }) => {
       {openedDepositeOpup ? (
         <AddIncomeForm depositeHandler={depositeHandler} />
       ) : (
-        <i></i>
+        <></>
       )}
-      {openedWithdrawOpup ? <WithdrawForm depositeHandler /> : <i></i>}
+      {openedWithdrawOpup ? (
+        <WithdrawForm withdrawHandler={withdrawHandler} />
+      ) : (
+        <></>
+      )}
     </PopupContainer>
   );
 };

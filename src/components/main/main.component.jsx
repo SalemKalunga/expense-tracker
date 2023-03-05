@@ -26,13 +26,18 @@ const Main = () => {
   };
 
   const expenseReducer = (state, action) => {
-    const { expenses } = state;
+    const { expenses, total } = state;
     const { type, payload } = action;
     switch (type) {
       case ACTIONS.TOTAL:
         return { ...state, total: getTotal(payload.expenses) };
       case ACTIONS.DEPOSE:
         return { ...state, expenses: [...expenses, payload] };
+      case ACTIONS.WITHDRAW:
+        if (payload.amount < total) {
+          return { ...state, expenses: [...expenses, payload] };
+        }
+        return state;
       default:
         return state;
     }
@@ -53,8 +58,6 @@ const Main = () => {
       const total = withdras.reduce((count, withdraw) => {
         if (totalA >= withdraw.amount) {
           count = totalA = totalA - withdraw.amount;
-          console.log(count);
-
           return count;
         }
         return count;
@@ -91,6 +94,9 @@ const Main = () => {
 
   const depositeHandler = (user) => {
     dispatch({ type: ACTIONS.DEPOSE, payload: user });
+  };
+  const withdrawHandler = (user) => {
+    dispatch({ type: ACTIONS.WITHDRAW, payload: user });
   };
   return (
     <MainPart>
@@ -139,7 +145,10 @@ const Main = () => {
         <WithdrawButton onClick={toggleWithdrawPopup}>retirer</WithdrawButton>
       </ButtonsContainer>
       {openedDepositeOpup || openedWithdrawOpup ? (
-        <AddIncomePopup depositeHandler={depositeHandler} />
+        <AddIncomePopup
+          withdrawHandler={withdrawHandler}
+          depositeHandler={depositeHandler}
+        />
       ) : (
         <i></i>
       )}
