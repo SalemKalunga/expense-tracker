@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexBox } from "../main/main.style";
+import { flexBox, colors } from "../main/main.style";
 
 export const Form = styled.form`
   ${flexBox("column", "center", "center", 1)};
@@ -7,4 +7,14 @@ export const Form = styled.form`
     padding: 1rem 2rem;
     width: 100%;
   }
+`;
+
+export const CloseButton = styled.button`
+  padding: 0.4rem;
+  border: 0;
+  margin: 1rem;
+  background-color: ${colors.red};
+  border-radius: 0.2rem;
+  color: ${colors.white};
+  cursor: pointer;
 `;

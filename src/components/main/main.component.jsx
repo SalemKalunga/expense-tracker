@@ -1,6 +1,5 @@
 import { useContext, useEffect, useReducer } from "react";
 import "./main.style";
-import { expenses } from "../../utils/data";
 import {
   ButtonsContainer,
   DepositeTd,
@@ -13,12 +12,13 @@ import {
 } from "./main.style";
 import AddIncomePopup from "../popup.component/popup.component";
 import { PopupContext } from "../../contexts/popup.context";
-const Main = () => {
-  const INITIAL_VALUES = {
-    total: 0,
-    expenses: expenses,
-  };
 
+const INITIAL_VALUES = {
+  total: 0,
+  expenses: [],
+};
+
+const Main = () => {
   const ACTIONS = {
     TOTAL: "total",
     DEPOSE: "deposite",
@@ -27,12 +27,14 @@ const Main = () => {
 
   const expenseReducer = (state, action) => {
     const { expenses } = state;
-    const { type } = action;
+    const { type, payload } = action;
     switch (type) {
       case ACTIONS.TOTAL:
-        return { ...state, total: getTotal(expenses) };
+        return { ...state, total: getTotal(payload.expenses) };
+      case ACTIONS.DEPOSE:
+        return { ...state, expenses: [...expenses, payload] };
       default:
-        break;
+        return state;
     }
   };
 
@@ -47,26 +49,32 @@ const Main = () => {
     let totalA = deposites.reduce((counter, deposite) => {
       return (counter = counter + deposite.amount);
     }, 0);
-    const total = withdras.reduce((count, withdraw) => {
-      if (totalA >= withdraw.amount) {
-        count = totalA = totalA - withdraw.amount;
+    if (withdras.length) {
+      const total = withdras.reduce((count, withdraw) => {
+        if (totalA >= withdraw.amount) {
+          count = totalA = totalA - withdraw.amount;
+          console.log(count);
+
+          return count;
+        }
         return count;
-      }
-      return count;
-    }, 0);
-
-    return total;
+      }, 0);
+      return total;
+    }
+    return totalA;
   };
 
-  const findTotal = () => {
-    dispatch({ type: ACTIONS.TOTAL });
-  };
+  const [{ total, expenses }, dispatch] = useReducer(
+    expenseReducer,
+    INITIAL_VALUES
+  );
 
   useEffect(() => {
-    findTotal();
-  }, expenses);
+    const totalFunction = () =>
+      dispatch({ type: ACTIONS.TOTAL, payload: { expenses } });
+    totalFunction();
+  }, [expenses, ACTIONS.TOTAL]);
 
-  const [{ total }, dispatch] = useReducer(expenseReducer, INITIAL_VALUES);
   const {
     openedDepositeOpup,
     setOpenedDepositeOpup,
@@ -79,6 +87,10 @@ const Main = () => {
   };
   const toggleWithdrawPopup = () => {
     setOpenedWithdrawOpup(!openedWithdrawOpup);
+  };
+
+  const depositeHandler = (user) => {
+    dispatch({ type: ACTIONS.DEPOSE, payload: user });
   };
   return (
     <MainPart>
@@ -126,7 +138,11 @@ const Main = () => {
         </AddIncomeButton>
         <WithdrawButton onClick={toggleWithdrawPopup}>retirer</WithdrawButton>
       </ButtonsContainer>
-      {openedDepositeOpup || openedWithdrawOpup ? <AddIncomePopup /> : <i></i>}
+      {openedDepositeOpup || openedWithdrawOpup ? (
+        <AddIncomePopup depositeHandler={depositeHandler} />
+      ) : (
+        <i></i>
+      )}
     </MainPart>
   );
 };
