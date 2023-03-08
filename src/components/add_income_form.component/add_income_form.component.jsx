@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { AddIncomeButton } from "../main/main.style";
+import { AddIncomeButton } from "../dashboard/dashboard.style";
 import { CloseButton, Form } from "./add_income_form.style";
 import { PopupContext } from "../../contexts/popup.context";
 

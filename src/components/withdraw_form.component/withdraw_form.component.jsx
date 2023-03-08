@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { WithdrawButton } from "../main/main.style";
+import { WithdrawButton } from "../dashboard/dashboard.style";
 import {
   CloseButton,
   Form,

@@ -30,7 +30,7 @@ export const responsivePadding = `
         padding:1rem 5rem;
     }
     @media screen and (max-width:550px){
-        padding:1rem 2rem;
+        padding:1rem .5rem;
     }
 `;
 export const PROPERTIES = {
@@ -38,6 +38,7 @@ export const PROPERTIES = {
     a: "box-shadow: 0px 0px 3px lightgray;",
     b: "box-shadow: 0px 3px 3px lightgray;",
     c: "box-shadow: 3px 3px 3px lightgray;",
+    d: "box-shadow: 0px 0px 5px lightgray;",
   },
 };
 export const flexBox = (direction, justify, align, gap) => {
@@ -136,4 +137,29 @@ export const WithdrawButton = styled.button`
     transform: translateY(-0.1rem);
     ${PROPERTIES.boxShadows.b}
   }
+`;
+
+const alert = `
+  padding: 1rem;
+  border: 1px solid;
+  text-align: center;
+  font-size: 1.1rem;
+  width: 50%;
+  @media screen and ${breakpoints.tablette} {
+    width: 60%;
+  }
+  @media screen and ${breakpoints.mobile} {
+    width: 90%;
+  }
+  margin:.2rem auto;
+  transform:translateY(1rem);
+  transition:all .5s ease-in-out;
+  `;
+export const ErrorMessage = styled.p`
+  color: ${colors.red};
+  ${alert}
+`;
+export const SuccessMessage = styled.p`
+  color: ${colors.success};
+  ${alert}
 `;

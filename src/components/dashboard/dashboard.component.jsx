@@ -1,5 +1,5 @@
-import { useContext, useEffect, useReducer } from "react";
-import "./main.style";
+import { useContext, useEffect, useReducer, useState } from "react";
+import "./dashboard.style";
 import {
   ButtonsContainer,
   DepositeTd,
@@ -9,7 +9,9 @@ import {
   TotalDiv,
   WithdrawTd,
   WithdrawButton,
-} from "./main.style";
+  ErrorMessage,
+  SuccessMessage,
+} from "./dashboard.style";
 import AddIncomePopup from "../popup.component/popup.component";
 import { PopupContext } from "../../contexts/popup.context";
 
@@ -18,13 +20,24 @@ const INITIAL_VALUES = {
   expenses: [],
 };
 
-const Main = () => {
+const Dashboard = () => {
   const ACTIONS = {
     TOTAL: "total",
     DEPOSE: "deposite",
     WITHDRAW: "withdraw",
   };
-
+  const initialAlerts = {
+    error: false,
+    success: false,
+  };
+  const [alerts, setAlerts] = useState(initialAlerts);
+  const toggleAlerts = (alrt) => {
+    if (alrt === 1) {
+      setAlerts({ ...alerts, error: !alerts.error });
+    } else {
+      setAlerts({ ...alerts, success: !alerts.success });
+    }
+  };
   const expenseReducer = (state, action) => {
     const { expenses, total } = state;
     const { type, payload } = action;
@@ -37,6 +50,7 @@ const Main = () => {
         if (payload.amount < total) {
           return { ...state, expenses: [...expenses, payload] };
         }
+        toggleAlerts(1);
         return state;
       default:
         return state;
@@ -144,6 +158,16 @@ const Main = () => {
         </AddIncomeButton>
         <WithdrawButton onClick={toggleWithdrawPopup}>retirer</WithdrawButton>
       </ButtonsContainer>
+      {alerts.error ? (
+        <ErrorMessage>Pas assez d'argent✋😊</ErrorMessage>
+      ) : (
+        <></>
+      )}
+      {alerts.success ? (
+        <SuccessMessage>Argent, Argent!🤑</SuccessMessage>
+      ) : (
+        <></>
+      )}
       {openedDepositeOpup || openedWithdrawOpup ? (
         <AddIncomePopup
           withdrawHandler={withdrawHandler}
@@ -156,4 +180,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Dashboard;

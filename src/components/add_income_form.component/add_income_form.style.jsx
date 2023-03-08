@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexBox, colors } from "../main/main.style";
+import { flexBox, colors } from "../dashboard/dashboard.style";
 
 export const Form = styled.form`
   ${flexBox("column", "center", "center", 1)};
