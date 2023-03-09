@@ -14,13 +14,19 @@ import {
 } from "./dashboard.style";
 import AddIncomePopup from "../popup.component/popup.component";
 import { PopupContext } from "../../contexts/popup.context";
-
+import { UserContext } from "../../contexts/user_context.component";
+import { useNavigate } from "react-router-dom";
 const INITIAL_VALUES = {
   total: 0,
   expenses: [],
 };
 
 const Dashboard = () => {
+  const { currentUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    !currentUser && navigate("/");
+  }, [currentUser, navigate]);
   const ACTIONS = {
     TOTAL: "total",
     DEPOSE: "deposite",

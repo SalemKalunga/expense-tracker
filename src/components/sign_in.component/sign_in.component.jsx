@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { signInWithPopup } from "firebase/auth";
 import {
   auth,
@@ -12,7 +12,10 @@ import { GoogleButton, SignInContainer, SignInForm } from "./sign_in.styles";
 const SignIn = () => {
   const { currentUser } = useContext(UserContext);
   const navigate = useNavigate();
-  currentUser && navigate("/dashboard");
+  useEffect(() => {
+    currentUser && navigate("/dashboard");
+  }, [currentUser, navigate]);
+  console.log(currentUser);
   const GoogleSignIn = async () => {
     try {
       const { user } = await signInWithPopup(auth, googleProvider);
