@@ -25,7 +25,7 @@ export const colors = {
   transparant_black_c: "rgba(0, 0, 0, 0.3)",
 };
 export const responsivePadding = `
-    padding:1rem 20rem;
+    padding:1rem 10rem;
     @media screen and (max-width:850px){
         padding:1rem 5rem;
     }

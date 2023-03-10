@@ -1,6 +1,11 @@
 import React, { useContext } from "react";
 import "./header.style";
-import { StyledHeader } from "./header.style";
+import {
+  LogoutButton,
+  ProfileImage,
+  ProfileImageContainer,
+  StyledHeader,
+} from "./header.style";
 import { Outlet } from "react-router-dom";
 import { signUserOut } from "../../utils/firebase";
 import { UserContext } from "../../contexts/user_context.component";
@@ -14,7 +19,14 @@ const Header = () => {
           width={60}
           alt="logo"
         />
-        {currentUser && <button onClick={signUserOut}>SignOut</button>}
+        <ProfileImageContainer>
+          {currentUser && (
+            <LogoutButton onClick={signUserOut}>SignOut</LogoutButton>
+          )}
+          {currentUser && (
+            <ProfileImage src={currentUser.photoURL} width={50} alt="profile" />
+          )}
+        </ProfileImageContainer>
       </StyledHeader>
       <Outlet />
     </>

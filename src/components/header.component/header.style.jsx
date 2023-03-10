@@ -9,3 +9,20 @@ export const StyledHeader = styled.header`
     display: inline-block;
   }
 `;
+export const ProfileImageContainer = styled.div`
+  position: relative;
+  height: 100%;
+  ${flexBox("row", "space-between", "space-between", 1)};
+`;
+export const ProfileImage = styled.img`
+  border-radius: 50%;
+`;
+export const LogoutButton = styled.button`
+  padding: 0.1rem;
+  border: 0.2rem solid transparent;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  &:active {
+    border-color: royalblue;
+  }
+`;

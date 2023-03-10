@@ -61,11 +61,7 @@ export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
 export const signUserOut = () => signOut(auth);
 export const EXPENSES_COLLECTION_REF = collection(db, "expenses");
-//une fonction pour ajouter un nouveau document
 
 export const addNewExpense = async (newExpense) => {
-  // nous avons besoins d'une référence au document que l'on veut inséré
-  const response = await addDoc(EXPENSES_COLLECTION_REF, newExpense);
-  console.log(response);
-  // console.log(newExpense);
+  await addDoc(EXPENSES_COLLECTION_REF, newExpense);
 };
