@@ -6,7 +6,13 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { doc, getDoc, setDoc, getFirestore } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  getFirestore,
+  collection,
+} from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,9 +32,9 @@ initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const googleProvider = new GoogleAuthProvider();
 
-const firestore = getFirestore();
+const db = getFirestore();
 export const createUserDocumentFromAuth = async (user) => {
-  const userReference = doc(firestore, "users", user.uid);
+  const userReference = doc(db, "users", user.uid);
   const userSnap = await getDoc(userReference);
   //   if the user does not exist do this
   if (!userSnap.exists()) {
@@ -53,3 +59,4 @@ export const createUserDocumentFromAuth = async (user) => {
 export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
 export const signUserOut = () => signOut(auth);
+export const EXPENSES_COLLECTION_REF = collection(db, "expenses");

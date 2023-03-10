@@ -16,6 +16,9 @@ import AddIncomePopup from "../popup.component/popup.component";
 import { PopupContext } from "../../contexts/popup.context";
 import { UserContext } from "../../contexts/user_context.component";
 import { useNavigate } from "react-router-dom";
+import { EXPENSES_COLLECTION_REF } from "../../utils/firebase";
+import { getDocs } from "firebase/firestore";
+
 const INITIAL_VALUES = {
   total: 0,
   expenses: [],
@@ -23,19 +26,23 @@ const INITIAL_VALUES = {
 
 const Dashboard = () => {
   const { currentUser } = useContext(UserContext);
+
   const navigate = useNavigate();
   useEffect(() => {
     !currentUser && navigate("/");
   }, [currentUser, navigate]);
+
   const ACTIONS = {
     TOTAL: "total",
     DEPOSE: "deposite",
     WITHDRAW: "withdraw",
+    SET_EXPENSES: "set-expenses",
   };
   const initialAlerts = {
     error: false,
     success: false,
   };
+
   const [alerts, setAlerts] = useState(initialAlerts);
   const toggleAlerts = (alrt) => {
     if (alrt === 1) {
@@ -44,12 +51,16 @@ const Dashboard = () => {
       setAlerts({ ...alerts, success: !alerts.success });
     }
   };
+  const [exepensesData, setExepensesData] = useState(INITIAL_VALUES.expenses);
+
   const expenseReducer = (state, action) => {
     const { expenses, total } = state;
     const { type, payload } = action;
     switch (type) {
       case ACTIONS.TOTAL:
         return { ...state, total: getTotal(payload.expenses) };
+      case ACTIONS.SET_EXPENSES:
+        return { ...state, expenses: payload };
       case ACTIONS.DEPOSE:
         return { ...state, expenses: [...expenses, payload] };
       case ACTIONS.WITHDRAW:
@@ -86,6 +97,34 @@ const Dashboard = () => {
     }
     return totalA;
   };
+
+  const getExpensesDataFromFirestore = async () => {
+    const expenesesDocs = await getDocs(EXPENSES_COLLECTION_REF);
+    const docsArray = expenesesDocs.docs.map((doc) => {
+      return doc.data();
+    });
+    setExepensesData(docsArray);
+  };
+
+  useEffect(() => {
+    getExpensesDataFromFirestore();
+  }, []);
+
+  useEffect(() => {
+    const currentUsersData = exepensesData.filter((expense) => {
+      if (!currentUser) return {};
+      return expense.userId === currentUser.uid;
+    });
+
+    const updateExpensesArray = () => {
+      dispatch({
+        type: ACTIONS.SET_EXPENSES,
+        payload: currentUsersData,
+      });
+    };
+
+    updateExpensesArray();
+  }, [exepensesData, ACTIONS.SET_EXPENSES, currentUser]);
 
   const [{ total, expenses }, dispatch] = useReducer(
     expenseReducer,

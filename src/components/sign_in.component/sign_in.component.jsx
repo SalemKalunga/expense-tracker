@@ -15,7 +15,7 @@ const SignIn = () => {
   useEffect(() => {
     currentUser && navigate("/dashboard");
   }, [currentUser, navigate]);
-  console.log(currentUser);
+  // console.log(currentUser);
   const GoogleSignIn = async () => {
     try {
       const { user } = await signInWithPopup(auth, googleProvider);
