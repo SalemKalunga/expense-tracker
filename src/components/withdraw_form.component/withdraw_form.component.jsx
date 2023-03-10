@@ -5,7 +5,8 @@ import {
   Form,
 } from "../add_income_form.component/add_income_form.style";
 import { PopupContext } from "../../contexts/popup.context";
-
+import { addNewExpense } from "../../utils/firebase";
+import { UserContext } from "../../contexts/user_context.component";
 const WithdrawForm = ({ withdrawHandler }) => {
   const { openedWithdrawOpup, setOpenedWithdrawOpup } =
     useContext(PopupContext);
@@ -14,7 +15,7 @@ const WithdrawForm = ({ withdrawHandler }) => {
     source: "",
   };
   const [withdrawFormData, setWithdrawFormData] = useState(formData);
-
+  const { currentUser } = useContext(UserContext);
   const { amount, source } = withdrawFormData;
 
   const formInputHandler = (event) => {
@@ -39,10 +40,11 @@ const WithdrawForm = ({ withdrawHandler }) => {
       id: ids.id,
       actionId: 0,
       reason: source,
+      userId: currentUser.uid,
       amount: parseFloat(amount),
       date: `${ids.day}/${ids.month}/${ids.year} - ${ids.hour}h : ${ids.minutes}min`,
     };
-    withdrawHandler(expense);
+    addNewExpense(expense);
     setOpenedWithdrawOpup(!openedWithdrawOpup);
   };
   return (

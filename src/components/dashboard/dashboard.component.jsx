@@ -110,6 +110,7 @@ const Dashboard = () => {
     getExpensesDataFromFirestore();
   }, []);
 
+  // USE EFFECT TO SET EXEPENSES == firestore data
   useEffect(() => {
     const currentUsersData = exepensesData.filter((expense) => {
       if (!currentUser) return {};

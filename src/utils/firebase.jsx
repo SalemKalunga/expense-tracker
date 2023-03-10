@@ -12,6 +12,7 @@ import {
   setDoc,
   getFirestore,
   collection,
+  addDoc,
 } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -60,3 +61,11 @@ export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
 export const signUserOut = () => signOut(auth);
 export const EXPENSES_COLLECTION_REF = collection(db, "expenses");
+//une fonction pour ajouter un nouveau document
+
+export const addNewExpense = async (newExpense) => {
+  // nous avons besoins d'une référence au document que l'on veut inséré
+  const response = await addDoc(EXPENSES_COLLECTION_REF, newExpense);
+  console.log(response);
+  // console.log(newExpense);
+};

@@ -2,13 +2,15 @@ import React, { useContext, useState } from "react";
 import { AddIncomeButton } from "../dashboard/dashboard.style";
 import { CloseButton, Form } from "./add_income_form.style";
 import { PopupContext } from "../../contexts/popup.context";
-
+import { UserContext } from "../../contexts/user_context.component";
+import { addNewExpense } from "../../utils/firebase";
 const AddIncomeForm = ({ depositeHandler }) => {
+  const { currentUser } = useContext(UserContext);
   const { openedDepositeOpup, setOpenedDepositeOpup } =
     useContext(PopupContext);
   const formData = {
-    amount: 0,
     source: "",
+    amount: 0,
   };
 
   const [depositeFormData, setdepositeFormData] = useState(formData);
@@ -35,11 +37,13 @@ const AddIncomeForm = ({ depositeHandler }) => {
     const expense = {
       id: ids.id,
       actionId: 1,
+      userId: currentUser.uid,
       reason: source,
       amount: parseFloat(amount),
       date: `${ids.day}/${ids.month}/${ids.year} - ${ids.hour}h : ${ids.minutes}min`,
     };
-    depositeHandler(expense);
+    // depositeHandler(expense);
+    addNewExpense(expense);
     setOpenedDepositeOpup(!openedDepositeOpup);
   };
 
