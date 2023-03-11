@@ -41,7 +41,7 @@ const AddIncomeForm = ({ depositeHandler }) => {
       userId: currentUser.uid,
       reason: source,
       amount: parseFloat(amount),
-      date: `${ids.day}-${ids.month}-${ids.year} ${ids.hour}h : ${ids.minutes}min`,
+      date: `${ids.day}-${ids.month}-${ids.year}`,
     };
     // depositeHandler(expense);
     depositeHandler(expense);

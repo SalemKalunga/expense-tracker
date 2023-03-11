@@ -41,7 +41,7 @@ const WithdrawForm = ({ withdrawHandler }) => {
       reason: source,
       userId: currentUser.uid,
       amount: parseFloat(amount),
-      date: `${ids.day}-${ids.month}-${ids.year} - ${ids.hour}h : ${ids.minutes}min`,
+      date: `${ids.day}-${ids.month}-${ids.year}`,
     };
     withdrawHandler(expense);
     setOpenedWithdrawOpup(!openedWithdrawOpup);

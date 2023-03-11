@@ -16,7 +16,7 @@ import AddIncomePopup from "../popup.component/popup.component";
 import { PopupContext } from "../../contexts/popup.context";
 import { UserContext } from "../../contexts/user_context.component";
 import { useNavigate } from "react-router-dom";
-import { EXPENSES_COLLECTION_REF } from "../../utils/firebase";
+import { deleteHandler, EXPENSES_COLLECTION_REF } from "../../utils/firebase";
 import { addDoc, getDocs } from "firebase/firestore";
 
 const INITIAL_VALUES = {
@@ -63,9 +63,9 @@ const Dashboard = () => {
     const withdras = [];
     const deposites = [];
     expenses.map((expense) => {
-      return expense.actionId
-        ? deposites.push(expense)
-        : withdras.push(expense);
+      return expense.doc.actionId
+        ? deposites.push(expense.doc)
+        : withdras.push(expense.doc);
     });
     let totalA = deposites.reduce((counter, deposite) => {
       return (counter = counter + deposite.amount);
@@ -86,7 +86,7 @@ const Dashboard = () => {
   const getExpensesDataFromFirestore = async () => {
     const expenesesDocs = await getDocs(EXPENSES_COLLECTION_REF);
     const docsArray = expenesesDocs.docs.map((doc) => {
-      return doc.data();
+      return { doc: doc.data(), docId: doc.id };
     });
     setExepensesData(docsArray);
   };
@@ -104,9 +104,8 @@ const Dashboard = () => {
   useEffect(() => {
     const currentUsersData = exepensesData.filter((expense) => {
       if (!currentUser) return {};
-      return expense.userId === currentUser.uid;
+      return expense.doc.userId === currentUser.uid;
     });
-
     const updateExpensesArray = () => {
       dispatch({
         type: ACTIONS.SET_EXPENSES,
@@ -142,6 +141,8 @@ const Dashboard = () => {
     setOpenedWithdrawOpup(!openedWithdrawOpup);
   };
 
+  // DELETE HANDLER
+
   return (
     <MainPart>
       <TotalDiv>
@@ -149,7 +150,10 @@ const Dashboard = () => {
       </TotalDiv>
       <Table>
         <tbody>
-          {expenses.map(({ id, actionId, amount, date, reason }) => {
+          {expenses.map((expenseObj) => {
+            const { doc } = expenseObj;
+            const { id, actionId, amount, date, reason } = doc;
+            // console.log(expenseObj.docId);
             return (
               <tr key={id}>
                 {actionId ? (
@@ -163,6 +167,18 @@ const Dashboard = () => {
                     <DepositeTd>
                       <p>{reason}</p>
                     </DepositeTd>
+                    <DepositeTd>
+                      <button
+                        onClick={() =>
+                          deleteHandler(
+                            expenseObj.docId,
+                            getExpensesDataFromFirestore
+                          )
+                        }
+                      >
+                        X
+                      </button>
+                    </DepositeTd>
                   </>
                 ) : (
                   <>
@@ -175,6 +191,18 @@ const Dashboard = () => {
                     <WithdrawTd>
                       <p>{reason}</p>
                     </WithdrawTd>
+                    <DepositeTd>
+                      <button
+                        onClick={() =>
+                          deleteHandler(
+                            expenseObj.docId,
+                            getExpensesDataFromFirestore
+                          )
+                        }
+                      >
+                        X
+                      </button>
+                    </DepositeTd>
                   </>
                 )}
               </tr>

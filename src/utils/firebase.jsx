@@ -13,6 +13,7 @@ import {
   getFirestore,
   collection,
   addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -33,7 +34,7 @@ initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const googleProvider = new GoogleAuthProvider();
 
-const db = getFirestore();
+export const db = getFirestore();
 export const createUserDocumentFromAuth = async (user) => {
   const userReference = doc(db, "users", user.uid);
   const userSnap = await getDoc(userReference);
@@ -64,4 +65,13 @@ export const EXPENSES_COLLECTION_REF = collection(db, "expenses");
 
 export const addNewExpense = async (newExpense) => {
   await addDoc(EXPENSES_COLLECTION_REF, newExpense);
+};
+export const deleteHandler = async (id, reloadData) => {
+  try {
+    const docRef = doc(db, "expenses", id);
+    await deleteDoc(docRef, id);
+    reloadData();
+  } catch (error) {
+    console.log(error);
+  }
 };
