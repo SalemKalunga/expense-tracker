@@ -9,8 +9,6 @@ import {
   TotalDiv,
   WithdrawTd,
   WithdrawButton,
-  ErrorMessage,
-  SuccessMessage,
 } from "./dashboard.style";
 import AddIncomePopup from "../popup.component/popup.component";
 import { PopupContext } from "../../contexts/popup.context";
@@ -38,12 +36,12 @@ const Dashboard = () => {
     WITHDRAW: "withdraw",
     SET_EXPENSES: "set-expenses",
   };
-  const initialAlerts = {
-    error: false,
-    success: false,
-  };
+  // const initialAlerts = {
+  //   error: false,
+  //   success: false,
+  // };
 
-  const [alerts, setAlerts] = useState(initialAlerts);
+  // const [alerts, setAlerts] = useState(initialAlerts);
 
   const [exepensesData, setExepensesData] = useState(INITIAL_VALUES.expenses);
 
@@ -216,7 +214,7 @@ const Dashboard = () => {
         </AddIncomeButton>
         <WithdrawButton onClick={toggleWithdrawPopup}>retirer</WithdrawButton>
       </ButtonsContainer>
-      {alerts.error ? (
+      {/* {alerts.error ? (
         <ErrorMessage>Pas assez d'argent✋😊</ErrorMessage>
       ) : (
         <></>
@@ -225,7 +223,7 @@ const Dashboard = () => {
         <SuccessMessage>Argent, Argent!🤑</SuccessMessage>
       ) : (
         <></>
-      )}
+      )} */}
       {openedDepositeOpup || openedWithdrawOpup ? (
         <AddIncomePopup
           withdrawHandler={addNewExpense}
