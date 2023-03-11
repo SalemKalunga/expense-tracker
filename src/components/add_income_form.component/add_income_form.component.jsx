@@ -3,7 +3,7 @@ import { AddIncomeButton } from "../dashboard/dashboard.style";
 import { CloseButton, Form } from "./add_income_form.style";
 import { PopupContext } from "../../contexts/popup.context";
 import { UserContext } from "../../contexts/user_context.component";
-import { addNewExpense } from "../../utils/firebase";
+// import { addNewExpense } from "../../utils/firebase";
 const AddIncomeForm = ({ depositeHandler }) => {
   const { currentUser } = useContext(UserContext);
   const { openedDepositeOpup, setOpenedDepositeOpup } =
@@ -34,16 +34,17 @@ const AddIncomeForm = ({ depositeHandler }) => {
       minutes: date.getMinutes(),
       seconds: date.getSeconds(),
     };
+
     const expense = {
       id: ids.id,
       actionId: 1,
       userId: currentUser.uid,
       reason: source,
       amount: parseFloat(amount),
-      date: `${ids.day}/${ids.month}/${ids.year} - ${ids.hour}h : ${ids.minutes}min`,
+      date: `${ids.day}-${ids.month}-${ids.year} ${ids.hour}h : ${ids.minutes}min`,
     };
     // depositeHandler(expense);
-    addNewExpense(expense);
+    depositeHandler(expense);
     setOpenedDepositeOpup(!openedDepositeOpup);
   };
 

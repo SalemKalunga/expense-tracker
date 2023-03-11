@@ -17,7 +17,7 @@ import { PopupContext } from "../../contexts/popup.context";
 import { UserContext } from "../../contexts/user_context.component";
 import { useNavigate } from "react-router-dom";
 import { EXPENSES_COLLECTION_REF } from "../../utils/firebase";
-import { getDocs } from "firebase/firestore";
+import { addDoc, getDocs } from "firebase/firestore";
 
 const INITIAL_VALUES = {
   total: 0,
@@ -44,31 +44,16 @@ const Dashboard = () => {
   };
 
   const [alerts, setAlerts] = useState(initialAlerts);
-  const toggleAlerts = (alrt) => {
-    if (alrt === 1) {
-      setAlerts({ ...alerts, error: !alerts.error });
-    } else {
-      setAlerts({ ...alerts, success: !alerts.success });
-    }
-  };
+
   const [exepensesData, setExepensesData] = useState(INITIAL_VALUES.expenses);
 
   const expenseReducer = (state, action) => {
-    const { expenses, total } = state;
     const { type, payload } = action;
     switch (type) {
       case ACTIONS.TOTAL:
         return { ...state, total: getTotal(payload.expenses) };
       case ACTIONS.SET_EXPENSES:
         return { ...state, expenses: payload };
-      case ACTIONS.DEPOSE:
-        return { ...state, expenses: [...expenses, payload] };
-      case ACTIONS.WITHDRAW:
-        if (payload.amount < total) {
-          return { ...state, expenses: [...expenses, payload] };
-        }
-        toggleAlerts(1);
-        return state;
       default:
         return state;
     }
@@ -109,6 +94,11 @@ const Dashboard = () => {
   useEffect(() => {
     getExpensesDataFromFirestore();
   }, []);
+
+  const addNewExpense = async (newExpense) => {
+    await addDoc(EXPENSES_COLLECTION_REF, newExpense);
+    getExpensesDataFromFirestore();
+  };
 
   // USE EFFECT TO SET EXEPENSES == firestore data
   useEffect(() => {
@@ -152,12 +142,6 @@ const Dashboard = () => {
     setOpenedWithdrawOpup(!openedWithdrawOpup);
   };
 
-  const depositeHandler = (user) => {
-    dispatch({ type: ACTIONS.DEPOSE, payload: user });
-  };
-  const withdrawHandler = (user) => {
-    dispatch({ type: ACTIONS.WITHDRAW, payload: user });
-  };
   return (
     <MainPart>
       <TotalDiv>
@@ -216,8 +200,8 @@ const Dashboard = () => {
       )}
       {openedDepositeOpup || openedWithdrawOpup ? (
         <AddIncomePopup
-          withdrawHandler={withdrawHandler}
-          depositeHandler={depositeHandler}
+          withdrawHandler={addNewExpense}
+          depositeHandler={addNewExpense}
         />
       ) : (
         <i></i>
