@@ -15,7 +15,7 @@ const Header = () => {
   return (
     <>
       <StyledHeader>
-        <img width={100} height={100} src={image} alt="logo" />
+        <img width={50} height={50} src={image} alt="logo" />
         <ProfileImageContainer>
           {currentUser && (
             <LogoutButton onClick={signUserOut}>SignOut</LogoutButton>
