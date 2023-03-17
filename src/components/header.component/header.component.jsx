@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import image from "../../images/ico-512x512.png";
 import "./header.style";
 import {
   LogoutButton,
@@ -14,11 +15,7 @@ const Header = () => {
   return (
     <>
       <StyledHeader>
-        <img
-          src="https://abscongo.com/congo/assets/images/icons/some/logo6.png"
-          width={60}
-          alt="logo"
-        />
+        <img width={100} height={100} src={image} alt="logo" />
         <ProfileImageContainer>
           {currentUser && (
             <LogoutButton onClick={signUserOut}>SignOut</LogoutButton>
