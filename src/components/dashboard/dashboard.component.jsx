@@ -76,61 +76,62 @@ const Dashboard = () => {
   // DELETE HANDLER
 
   return (
-    <MainPart>
-      <TotalDiv>
-        <h2>Total: ${totalMoney}</h2>
-      </TotalDiv>
-      <Table>
-        <tbody>
-          {expensesData.map((expenseObj) => {
-            const { doc } = expenseObj;
-            const { id, actionId, amount, date, reason } = doc;
-            // console.log(expenseObj.docId);
-            return (
-              <tr key={id}>
-                {actionId ? (
-                  <>
-                    <DepositeTd>
-                      <p>+ ${amount}</p>
-                    </DepositeTd>
-                    <DepositeTd>
-                      <p>{date}</p>
-                    </DepositeTd>
-                    <DepositeTd>
-                      <p>{reason}</p>
-                    </DepositeTd>
-                    <DepositeTd>
-                      <button>X</button>
-                    </DepositeTd>
-                  </>
-                ) : (
-                  <>
-                    <WithdrawTd>
-                      <p>- ${amount}</p>
-                    </WithdrawTd>
-                    <WithdrawTd>
-                      <p>{date}</p>
-                    </WithdrawTd>
-                    <WithdrawTd>
-                      <p>{reason}</p>
-                    </WithdrawTd>
-                    <DepositeTd>
-                      <button>X</button>
-                    </DepositeTd>
-                  </>
-                )}
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-      <ButtonsContainer>
-        <AddIncomeButton onClick={toggleDepositePopup}>
-          effectuer un dépot
-        </AddIncomeButton>
-        <WithdrawButton onClick={toggleWithdrawPopup}>retirer</WithdrawButton>
-      </ButtonsContainer>
-      {/* {alerts.error ? (
+    <>
+      <MainPart>
+        <TotalDiv>
+          <h2>Total: ${totalMoney}</h2>
+        </TotalDiv>
+        <Table>
+          <tbody>
+            {expensesData.map((expenseObj) => {
+              const { doc } = expenseObj;
+              const { id, actionId, amount, date, reason } = doc;
+              // console.log(expenseObj.docId);
+              return (
+                <tr key={id}>
+                  {actionId ? (
+                    <>
+                      <DepositeTd>
+                        <p>+ ${amount}</p>
+                      </DepositeTd>
+                      <DepositeTd>
+                        <p>{date}</p>
+                      </DepositeTd>
+                      <DepositeTd>
+                        <p>{reason}</p>
+                      </DepositeTd>
+                      <DepositeTd>
+                        <button>X</button>
+                      </DepositeTd>
+                    </>
+                  ) : (
+                    <>
+                      <WithdrawTd>
+                        <p>- ${amount}</p>
+                      </WithdrawTd>
+                      <WithdrawTd>
+                        <p>{date}</p>
+                      </WithdrawTd>
+                      <WithdrawTd>
+                        <p>{reason}</p>
+                      </WithdrawTd>
+                      <DepositeTd>
+                        <button>X</button>
+                      </DepositeTd>
+                    </>
+                  )}
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+        <ButtonsContainer>
+          <AddIncomeButton onClick={toggleDepositePopup}>
+            effectuer un dépot
+          </AddIncomeButton>
+          <WithdrawButton onClick={toggleWithdrawPopup}>retirer</WithdrawButton>
+        </ButtonsContainer>
+        {/* {alerts.error ? (
         <ErrorMessage>Pas assez d'argent✋😊</ErrorMessage>
       ) : (
         <></>
@@ -140,15 +141,16 @@ const Dashboard = () => {
       ) : (
         <></>
       )} */}
-      {openedDepositeOpup || openedWithdrawOpup ? (
-        <PopupComponent
-          withdrawHandler={addNewExpense}
-          depositeHandler={addNewExpense}
-        />
-      ) : (
-        <i></i>
-      )}
-    </MainPart>
+        {openedDepositeOpup || openedWithdrawOpup ? (
+          <PopupComponent
+            withdrawHandler={addNewExpense}
+            depositeHandler={addNewExpense}
+          />
+        ) : (
+          <i></i>
+        )}
+      </MainPart>
+    </>
   );
 };
 
