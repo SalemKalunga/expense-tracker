@@ -5,7 +5,9 @@ import {
   Form,
 } from "../add_income_form.component/add_income_form.style";
 import { PopupContext } from "../../contexts/popup.context";
-import { UserContext } from "../../contexts/user_context.component";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/user.selectors";
+
 const WithdrawForm = ({ withdrawHandler }) => {
   const { openedWithdrawOpup, setOpenedWithdrawOpup } =
     useContext(PopupContext);
@@ -14,7 +16,7 @@ const WithdrawForm = ({ withdrawHandler }) => {
     source: "",
   };
   const [withdrawFormData, setWithdrawFormData] = useState(formData);
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(selectCurrentUser);
   const { amount, source } = withdrawFormData;
 
   const formInputHandler = (event) => {
