@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import image from "../../images/ico-512x512.png";
 import "./header.style";
 import {
@@ -9,9 +9,11 @@ import {
 } from "./header.style";
 import { Outlet } from "react-router-dom";
 import { signUserOut } from "../../utils/firebase";
-import { UserContext } from "../../contexts/user_context.component";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/user.selectors";
 const Header = () => {
-  const { currentUser } = useContext(UserContext);
+  // const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(selectCurrentUser);
   return (
     <>
       <StyledHeader>

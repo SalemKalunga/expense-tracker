@@ -12,10 +12,11 @@ import {
 } from "./dashboard.style";
 import AddIncomePopup from "../popup.component/popup.component";
 import { PopupContext } from "../../contexts/popup.context";
-import { UserContext } from "../../contexts/user_context.component";
 import { useNavigate } from "react-router-dom";
 import { deleteHandler, EXPENSES_COLLECTION_REF } from "../../utils/firebase";
 import { addDoc, getDocs } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/user.selectors";
 
 const INITIAL_VALUES = {
   total: 0,
@@ -23,7 +24,7 @@ const INITIAL_VALUES = {
 };
 
 const Dashboard = () => {
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(selectCurrentUser);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -36,12 +37,6 @@ const Dashboard = () => {
     WITHDRAW: "withdraw",
     SET_EXPENSES: "set-expenses",
   };
-  // const initialAlerts = {
-  //   error: false,
-  //   success: false,
-  // };
-
-  // const [alerts, setAlerts] = useState(initialAlerts);
 
   const [exepensesData, setExepensesData] = useState(INITIAL_VALUES.expenses);
 
