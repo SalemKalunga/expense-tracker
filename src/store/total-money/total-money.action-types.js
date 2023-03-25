@@ -1,0 +1,3 @@
+export const TOTAL_MONEY_ACTIONS = {
+  SET_TOTAL_MONEY: "total/SET_TOTAL_MONEY",
+};

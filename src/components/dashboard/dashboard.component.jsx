@@ -12,7 +12,11 @@ import {
 } from "./dashboard.style";
 import PopupComponent from "../popup.component/popup.component";
 import { useNavigate } from "react-router-dom";
-import { deleteHandler, EXPENSES_COLLECTION_REF } from "../../utils/firebase";
+import {
+  deleteHandler,
+  EXPENSES_COLLECTION_REF,
+  totalUserMoney,
+} from "../../utils/firebase";
 import { addDoc, getDocs } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/user.selectors";
@@ -24,6 +28,8 @@ import {
   toggleDepositeFrom,
   toggleWithdrawFrom,
 } from "../../store/popup/popup.actions";
+import { setTotalMoney } from "../../store/total-money/total-money.actions";
+import { selectTotal } from "../../store/total-money/total-money.selectors";
 
 const INITIAL_VALUES = {
   total: 0,
@@ -38,6 +44,17 @@ const Dashboard = () => {
   useEffect(() => {
     !currentUser && navigate("/");
   }, [currentUser, navigate]);
+
+  currentUser &&
+    totalUserMoney(currentUser.uid)
+      .then((data) => {
+        _dispatch(setTotalMoney(data.total));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+  const totalMoney = useSelector(selectTotal);
 
   const ACTIONS = {
     TOTAL: "total",
@@ -117,10 +134,7 @@ const Dashboard = () => {
     updateExpensesArray();
   }, [exepensesData, ACTIONS.SET_EXPENSES, currentUser]);
 
-  const [{ total, expenses }, dispatch] = useReducer(
-    expenseReducer,
-    INITIAL_VALUES
-  );
+  const [{ expenses }, dispatch] = useReducer(expenseReducer, INITIAL_VALUES);
 
   useEffect(() => {
     const totalFunction = () =>
@@ -142,7 +156,7 @@ const Dashboard = () => {
   return (
     <MainPart>
       <TotalDiv>
-        <h2>Total: ${total}</h2>
+        <h2>Total: ${totalMoney}</h2>
       </TotalDiv>
       <Table>
         <tbody>
