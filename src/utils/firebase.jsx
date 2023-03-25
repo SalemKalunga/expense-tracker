@@ -84,3 +84,11 @@ export const totalUserMoney = async (userId) => {
   const usersTotals = allTotalDocs.filter((obj) => obj.userId === userId);
   return usersTotals[0];
 };
+
+export const getExpensesDataFromFirestore = async () => {
+  const expenses = await getDocs(EXPENSES_COLLECTION_REF);
+  const docsArray = expenses.docs.map((doc) => {
+    return { doc: doc.data(), docId: doc.id };
+  });
+  return docsArray;
+};

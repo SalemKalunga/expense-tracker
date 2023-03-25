@@ -4,3 +4,4 @@ export const setTotalMoney = (total) => ({
   type: TOTAL_MONEY_ACTIONS.SET_TOTAL_MONEY,
   payload: total,
 });
+  
