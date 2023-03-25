@@ -1,16 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { WithdrawButton } from "../dashboard/dashboard.style";
 import {
   CloseButton,
   Form,
 } from "../add_income_form.component/add_income_form.style";
-import { PopupContext } from "../../contexts/popup.context";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/user.selectors";
+import { selectWithdrawPopupStateValue } from "../../store/popup/popup.selectors";
+import { toggleWithdrawFrom } from "../../store/popup/popup.actions";
 
 const WithdrawForm = ({ withdrawHandler }) => {
-  const { openedWithdrawOpup, setOpenedWithdrawOpup } =
-    useContext(PopupContext);
+  const openedWithdrawOpup = useSelector(selectWithdrawPopupStateValue);
+  const dispatch = useDispatch();
+
   const formData = {
     amount: 0,
     source: "",
@@ -46,13 +48,15 @@ const WithdrawForm = ({ withdrawHandler }) => {
       date: `${ids.day}-${ids.month}-${ids.year}`,
     };
     withdrawHandler(expense);
-    setOpenedWithdrawOpup(!openedWithdrawOpup);
+    dispatch(toggleWithdrawFrom(!openedWithdrawOpup));
   };
   return (
     <>
       <h1>Retrait</h1>
       <br />
-      <CloseButton onClick={() => setOpenedWithdrawOpup(!openedWithdrawOpup)}>
+      <CloseButton
+        onClick={() => dispatch(toggleWithdrawFrom(!openedWithdrawOpup))}
+      >
         X
       </CloseButton>
       <Form onSubmit={HandleWithdraw}>

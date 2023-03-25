@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import "./dashboard.style";
 import {
   ButtonsContainer,
@@ -10,13 +10,20 @@ import {
   WithdrawTd,
   WithdrawButton,
 } from "./dashboard.style";
-import AddIncomePopup from "../popup.component/popup.component";
-import { PopupContext } from "../../contexts/popup.context";
+import PopupComponent from "../popup.component/popup.component";
 import { useNavigate } from "react-router-dom";
 import { deleteHandler, EXPENSES_COLLECTION_REF } from "../../utils/firebase";
 import { addDoc, getDocs } from "firebase/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/user.selectors";
+import {
+  selectDepositePopupStateValue,
+  selectWithdrawPopupStateValue,
+} from "../../store/popup/popup.selectors";
+import {
+  toggleDepositeFrom,
+  toggleWithdrawFrom,
+} from "../../store/popup/popup.actions";
 
 const INITIAL_VALUES = {
   total: 0,
@@ -26,6 +33,7 @@ const INITIAL_VALUES = {
 const Dashboard = () => {
   const currentUser = useSelector(selectCurrentUser);
 
+  const _dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
     !currentUser && navigate("/");
@@ -120,18 +128,13 @@ const Dashboard = () => {
     totalFunction();
   }, [expenses, ACTIONS.TOTAL]);
 
-  const {
-    openedDepositeOpup,
-    setOpenedDepositeOpup,
-    openedWithdrawOpup,
-    setOpenedWithdrawOpup,
-  } = useContext(PopupContext);
-
+  const openedDepositeOpup = useSelector(selectDepositePopupStateValue);
+  const openedWithdrawOpup = useSelector(selectWithdrawPopupStateValue);
   const toggleDepositePopup = () => {
-    setOpenedDepositeOpup(!openedDepositeOpup);
+    _dispatch(toggleDepositeFrom(!openedDepositeOpup));
   };
   const toggleWithdrawPopup = () => {
-    setOpenedWithdrawOpup(!openedWithdrawOpup);
+    _dispatch(toggleWithdrawFrom(!openedWithdrawOpup));
   };
 
   // DELETE HANDLER
@@ -220,7 +223,7 @@ const Dashboard = () => {
         <></>
       )} */}
       {openedDepositeOpup || openedWithdrawOpup ? (
-        <AddIncomePopup
+        <PopupComponent
           withdrawHandler={addNewExpense}
           depositeHandler={addNewExpense}
         />
