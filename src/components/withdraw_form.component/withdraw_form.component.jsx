@@ -1,22 +1,27 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { WithdrawButton } from "../dashboard/dashboard.style";
 import {
   CloseButton,
   Form,
 } from "../add_income_form.component/add_income_form.style";
-import { PopupContext } from "../../contexts/popup.context";
-import { UserContext } from "../../contexts/user_context.component";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/user.selectors";
+import { selectWithdrawPopupStateValue } from "../../store/popup/popup.selectors";
+import { toggleWithdrawFrom } from "../../store/popup/popup.actions";
+import { selectTotal } from "../../store/total-money/total-money.selectors";
+
 const WithdrawForm = ({ withdrawHandler }) => {
-  const { openedWithdrawOpup, setOpenedWithdrawOpup } =
-    useContext(PopupContext);
+  const openedWithdrawOpup = useSelector(selectWithdrawPopupStateValue);
+  const dispatch = useDispatch();
+
   const formData = {
     amount: 0,
     source: "",
   };
   const [withdrawFormData, setWithdrawFormData] = useState(formData);
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(selectCurrentUser);
   const { amount, source } = withdrawFormData;
-
+  const total = useSelector(selectTotal);
   const formInputHandler = (event) => {
     const { name, value } = event.target;
     setWithdrawFormData({ ...withdrawFormData, [name]: value });
@@ -43,14 +48,18 @@ const WithdrawForm = ({ withdrawHandler }) => {
       amount: parseFloat(amount),
       date: `${ids.day}-${ids.month}-${ids.year}`,
     };
-    withdrawHandler(expense);
-    setOpenedWithdrawOpup(!openedWithdrawOpup);
+    if (amount < total) {
+      withdrawHandler(expense);
+    }
+    dispatch(toggleWithdrawFrom(!openedWithdrawOpup));
   };
   return (
     <>
       <h1>Retrait</h1>
       <br />
-      <CloseButton onClick={() => setOpenedWithdrawOpup(!openedWithdrawOpup)}>
+      <CloseButton
+        onClick={() => dispatch(toggleWithdrawFrom(!openedWithdrawOpup))}
+      >
         X
       </CloseButton>
       <Form onSubmit={HandleWithdraw}>

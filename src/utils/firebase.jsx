@@ -14,6 +14,7 @@ import {
   collection,
   addDoc,
   deleteDoc,
+  getDocs,
 } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -74,4 +75,21 @@ export const deleteHandler = async (id, reloadData) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const usersTotalMoneyCollectionRef = collection(db, "totals-somes");
+
+export const totalUserMoney = async (userId) => {
+  const totalUserMoneyDocs = await getDocs(usersTotalMoneyCollectionRef);
+  const allTotalDocs = totalUserMoneyDocs.docs.map((doc) => doc.data());
+  const usersTotals = allTotalDocs.filter((obj) => obj.userId === userId);
+  return usersTotals[0];
+};
+
+export const getExpensesDataFromFirestore = async () => {
+  const expenses = await getDocs(EXPENSES_COLLECTION_REF);
+  const docsArray = expenses.docs.map((doc) => {
+    return { doc: doc.data(), docId: doc.id };
+  });
+  return docsArray;
 };

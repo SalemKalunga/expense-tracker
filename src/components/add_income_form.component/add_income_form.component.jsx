@@ -1,13 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { AddIncomeButton } from "../dashboard/dashboard.style";
 import { CloseButton, Form } from "./add_income_form.style";
-import { PopupContext } from "../../contexts/popup.context";
-import { UserContext } from "../../contexts/user_context.component";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/user.selectors";
+import { selectDepositePopupStateValue } from "../../store/popup/popup.selectors";
+import { toggleDepositeFrom } from "../../store/popup/popup.actions";
 // import { addNewExpense } from "../../utils/firebase";
 const AddIncomeForm = ({ depositeHandler }) => {
-  const { currentUser } = useContext(UserContext);
-  const { openedDepositeOpup, setOpenedDepositeOpup } =
-    useContext(PopupContext);
+  const currentUser = useSelector(selectCurrentUser);
+  const openedDepositeOpup = useSelector(selectDepositePopupStateValue);
+  const dispatch = useDispatch();
+
   const formData = {
     source: "",
     amount: 0,
@@ -45,14 +48,16 @@ const AddIncomeForm = ({ depositeHandler }) => {
     };
     // depositeHandler(expense);
     depositeHandler(expense);
-    setOpenedDepositeOpup(!openedDepositeOpup);
+    dispatch(toggleDepositeFrom(!openedDepositeOpup));
   };
 
   return (
     <>
       <h1>Dépot</h1>
       <br />
-      <CloseButton onClick={() => setOpenedDepositeOpup(!openedDepositeOpup)}>
+      <CloseButton
+        onClick={() => dispatch(toggleDepositeFrom(!openedDepositeOpup))}
+      >
         X
       </CloseButton>
       <Form onSubmit={HandleDeposite}>
