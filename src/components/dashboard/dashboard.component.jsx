@@ -14,6 +14,7 @@ import PopupComponent from "../popup.component/popup.component";
 import { useNavigate } from "react-router-dom";
 import {
   db,
+  deleteHandler,
   EXPENSES_COLLECTION_REF,
   usersTotalMoneyCollectionRef,
 } from "../../utils/firebase";
@@ -95,7 +96,9 @@ const Dashboard = () => {
   };
 
   // DELETE HANDLER
-
+  const deleteExpense = async (docId) => {
+    deleteHandler(docId, getUsersExpenses);
+  };
   return (
     <>
       <MainPart>
@@ -122,7 +125,9 @@ const Dashboard = () => {
                         <p>{reason}</p>
                       </DepositeTd>
                       <DepositeTd>
-                        <button>X</button>
+                        <button onClick={() => deleteExpense(expenseObj.docId)}>
+                          X
+                        </button>
                       </DepositeTd>
                     </>
                   ) : (
@@ -137,7 +142,9 @@ const Dashboard = () => {
                         <p>{reason}</p>
                       </WithdrawTd>
                       <DepositeTd>
-                        <button>X</button>
+                        <button onClick={() => deleteExpense(expenseObj.docId)}>
+                          X
+                        </button>
                       </DepositeTd>
                     </>
                   )}

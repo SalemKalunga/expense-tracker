@@ -79,6 +79,13 @@ export const Table = styled.table`
 
 export const DepositeTd = styled.td`
   color: ${colors.success};
+  button {
+    background-color: ${colors.crimson};
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    border: 0;
+    color: ${colors.white};
+  }
 `;
 export const WithdrawTd = styled.td`
   color: ${colors.gray};
