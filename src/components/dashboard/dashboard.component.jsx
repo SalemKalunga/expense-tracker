@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./dashboard.style";
 import {
   ButtonsContainer,
@@ -33,6 +33,7 @@ import { fetchTotalAmount } from "../../store/total-money/total-money.actions";
 import { selectTotal } from "../../store/total-money/total-money.selectors";
 import { selectExpenses } from "../../store/expense/expense.selectors";
 import { fetchExpensesAsync } from "../../store/expense/expense.actions";
+import Pagination from "../pagination/pagination.component";
 
 const Dashboard = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -49,6 +50,13 @@ const Dashboard = () => {
 
   const expensesData = useSelector(selectExpenses);
 
+  // PAGINATED ARRAY
+  const perPage = 6;
+  const [currentPage, setCurrentPage] = useState(1);
+  const lastIndex = currentPage * perPage;
+  const firstIndex = lastIndex - perPage;
+
+  const currentExpenses = expensesData.slice(firstIndex, lastIndex);
   const getUsersExpenses = async () => {
     currentUser && fetchExpensesAsync(_dispatch, currentUser.uid);
   };
@@ -107,7 +115,7 @@ const Dashboard = () => {
         </TotalDiv>
         <Table>
           <tbody>
-            {expensesData.map((expenseObj) => {
+            {currentExpenses.map((expenseObj) => {
               const { doc } = expenseObj;
               const { id, actionId, amount, date, reason } = doc;
               // console.log(expenseObj.docId);
@@ -153,6 +161,11 @@ const Dashboard = () => {
             })}
           </tbody>
         </Table>
+        <Pagination
+          perPage={perPage}
+          totalExpenses={expensesData}
+          setCurrentPage={setCurrentPage}
+        />
         <ButtonsContainer>
           <AddIncomeButton onClick={toggleDepositePopup}>
             effectuer un dépot
