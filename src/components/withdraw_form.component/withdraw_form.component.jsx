@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/user.selectors";
 import { selectWithdrawPopupStateValue } from "../../store/popup/popup.selectors";
 import { toggleWithdrawFrom } from "../../store/popup/popup.actions";
+import { selectTotal } from "../../store/total-money/total-money.selectors";
 
 const WithdrawForm = ({ withdrawHandler }) => {
   const openedWithdrawOpup = useSelector(selectWithdrawPopupStateValue);
@@ -20,7 +21,7 @@ const WithdrawForm = ({ withdrawHandler }) => {
   const [withdrawFormData, setWithdrawFormData] = useState(formData);
   const currentUser = useSelector(selectCurrentUser);
   const { amount, source } = withdrawFormData;
-
+  const total = useSelector(selectTotal);
   const formInputHandler = (event) => {
     const { name, value } = event.target;
     setWithdrawFormData({ ...withdrawFormData, [name]: value });
@@ -47,7 +48,9 @@ const WithdrawForm = ({ withdrawHandler }) => {
       amount: parseFloat(amount),
       date: `${ids.day}-${ids.month}-${ids.year}`,
     };
-    withdrawHandler(expense);
+    if (amount < total) {
+      withdrawHandler(expense);
+    }
     dispatch(toggleWithdrawFrom(!openedWithdrawOpup));
   };
   return (

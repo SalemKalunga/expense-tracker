@@ -12,8 +12,12 @@ import {
 } from "./dashboard.style";
 import PopupComponent from "../popup.component/popup.component";
 import { useNavigate } from "react-router-dom";
-import { EXPENSES_COLLECTION_REF, totalUserMoney } from "../../utils/firebase";
-import { addDoc } from "firebase/firestore";
+import {
+  db,
+  EXPENSES_COLLECTION_REF,
+  usersTotalMoneyCollectionRef,
+} from "../../utils/firebase";
+import { addDoc, doc, getDocs, setDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/user.selectors";
 import {
@@ -24,7 +28,7 @@ import {
   toggleDepositeFrom,
   toggleWithdrawFrom,
 } from "../../store/popup/popup.actions";
-import { setTotalMoney } from "../../store/total-money/total-money.actions";
+import { fetchTotalAmount } from "../../store/total-money/total-money.actions";
 import { selectTotal } from "../../store/total-money/total-money.selectors";
 import { selectExpenses } from "../../store/expense/expense.selectors";
 import { fetchExpensesAsync } from "../../store/expense/expense.actions";
@@ -38,14 +42,7 @@ const Dashboard = () => {
     !currentUser && navigate("/");
   }, [currentUser, navigate]);
 
-  currentUser &&
-    totalUserMoney(currentUser.uid)
-      .then((data) => {
-        _dispatch(setTotalMoney(data.total));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  currentUser && fetchTotalAmount(_dispatch, currentUser.uid);
 
   const totalMoney = useSelector(selectTotal);
 
@@ -61,6 +58,30 @@ const Dashboard = () => {
 
   const addNewExpense = async (newExpense) => {
     await addDoc(EXPENSES_COLLECTION_REF, newExpense);
+    console.log("THIS EXPENSE: ", newExpense);
+
+    const totalUserMoneyDocs = await getDocs(usersTotalMoneyCollectionRef);
+    const allTotalDocs = totalUserMoneyDocs.docs.map((doc) => ({
+      doc: doc.data(),
+      docId: doc.id,
+    }));
+
+    const usersTotals = allTotalDocs.filter(
+      (obj) => obj.doc.userId === currentUser.uid
+    );
+
+    let sommedTotal = 0;
+    if (newExpense.actionId === 0) {
+      totalMoney > newExpense.amount
+        ? (sommedTotal = totalMoney - newExpense.amount)
+        : (sommedTotal = totalMoney);
+    } else {
+      sommedTotal = totalMoney + newExpense.amount;
+    }
+    const docRef = doc(db, "totals-somes", usersTotals[0].docId);
+    const updatedTotal = { ...usersTotals[0].doc, total: sommedTotal };
+    await setDoc(docRef, updatedTotal);
+
     getUsersExpenses();
   };
 

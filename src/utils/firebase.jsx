@@ -77,7 +77,8 @@ export const deleteHandler = async (id, reloadData) => {
   }
 };
 
-const usersTotalMoneyCollectionRef = collection(db, "totals-somes");
+export const usersTotalMoneyCollectionRef = collection(db, "totals-somes");
+
 export const totalUserMoney = async (userId) => {
   const totalUserMoneyDocs = await getDocs(usersTotalMoneyCollectionRef);
   const allTotalDocs = totalUserMoneyDocs.docs.map((doc) => doc.data());

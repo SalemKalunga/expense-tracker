@@ -31,6 +31,7 @@ export const responsivePadding = `
     }
     @media screen and (max-width:550px){
         padding:1rem .5rem;
+        font-size:.8rem;
     }
 `;
 export const PROPERTIES = {
